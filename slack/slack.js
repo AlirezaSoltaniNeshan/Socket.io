@@ -4,7 +4,7 @@ const app = express()
 app.use(express.static('public'))
 
 const namespaces = require('./data/namespaces');
-
+// console.log(namespaces[1].rooms)
 
 const expressServer = app.listen(9000)
 
@@ -32,6 +32,6 @@ namespaces.forEach(namespace=>{
         // Will show to client side
         console.log(`${nsSocket.id} has join with ${namespace.endpoint}`);
 
-        nsSocket.emit("nsRoomLoad", namespaces[0].rooms);
+        nsSocket.emit("nsRoomLoad", namespace.rooms);
     })
 })
