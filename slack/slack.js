@@ -33,5 +33,45 @@ namespaces.forEach(namespace=>{
         console.log(`${nsSocket.id} has join with ${namespace.endpoint}`);
 
         nsSocket.emit("nsRoomLoad", namespace.rooms);
-    })
-})
+        // Grab the all message + room of chat!
+        nsSocket.on('joinRoom', (roomToJoin, numberOfUsersCallback)=>{
+            nsSocket.join(roomToJoin);
+            // io.of(namespace.endpoint).in(roomToJoin).clients((err, clients)=>{
+            //     // console.log(clients.length); 
+            //     numberOfUsersCallback(clients.length);
+            // });
+            // *******NEXT OF ANY THINGS AND IMPORTANT LINE FOR LOADING ANYTHINGS ABOUT USERS HISTORY!***********
+            const nsRoom = namespace.rooms.find(room=>{
+                return room.roomTitle === roomToJoin;
+            });
+            nsSocket.emit('historyCatchUp', nsRoom.history)
+            // sync server to client for getting number of users in real time...
+            io.of(namespace.endpoint).in(roomToJoin).clients((err, clients)=>{
+                io.of(namespace.endpoint).in(roomToJoin).emit("usersNumber", clients.length)
+            });
+        });
+        nsSocket.on('userMessage', msg =>{
+            
+            const fullMsg = {
+                text: msg.text,
+                time: Date.now(),
+                username: 'Alireza.codes',
+                avatar: 'http://via.placeholder.com/30'
+            };
+            // console.log(msg);
+            // console.log(nsSocket.rooms)
+            // Where room you send your message? 
+            const roomTitle = Object.keys(nsSocket.rooms)[1];
+            // console.log(roomTitle);
+            // Get instance of Room class object.
+            // If room class object equal to getting join room
+            const nsRoom = namespace.rooms.find((room)=>{
+                return room.roomTitle === roomTitle;
+            })
+            // console.log(nsRoom);
+            nsRoom.addMessage(fullMsg);
+
+            io.of(namespace.endpoint).to(roomTitle).emit("serverMessage", fullMsg);
+        })
+    });
+});
