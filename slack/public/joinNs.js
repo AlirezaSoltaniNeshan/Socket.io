@@ -1,4 +1,7 @@
 function joinNs(endpoint) {
+    if(nsSocket != ""){
+        nsSocket.close();
+    }
     // Create a namespace socket.io
     nsSocket = io(`http://localhost:9000${endpoint}`)
 
