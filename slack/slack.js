@@ -30,11 +30,15 @@ namespaces.forEach(namespace=>{
     // Create a individual endpoints for any namespaces
     io.of(namespace.endpoint).on('connection', (nsSocket)=>{
         // Will show to client side
-        console.log(`${nsSocket.id} has join with ${namespace.endpoint}`);
+        // console.log(`${nsSocket.id} has join with ${namespace.endpoint}`);
 
         nsSocket.emit("nsRoomLoad", namespace.rooms);
         // Grab the all message + room of chat!
         nsSocket.on('joinRoom', (roomToJoin, numberOfUsersCallback)=>{
+            // Before of join to any homes, we should to leave from current room!
+            // Getting current room
+            const roomTitle = Object.keys(nsSocket.rooms)[1];
+            nsSocket.leave(roomTitle);
             nsSocket.join(roomToJoin);
             // io.of(namespace.endpoint).in(roomToJoin).clients((err, clients)=>{
             //     // console.log(clients.length); 
@@ -55,7 +59,7 @@ namespaces.forEach(namespace=>{
             const fullMsg = {
                 text: msg.text,
                 time: Date.now(),
-                username: 'Alireza.codes',
+                username: `${msg.username}`,
                 avatar: 'http://via.placeholder.com/30'
             };
             // console.log(msg);

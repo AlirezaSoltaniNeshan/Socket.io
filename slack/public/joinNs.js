@@ -37,9 +37,7 @@ function joinNs(endpoint) {
     nsSocket.on('serverMessage', (serverMessage) => {
         document.querySelector('#messages').innerHTML += HTMLTemp(serverMessage);
     })
-
     document.querySelector('.message-form').addEventListener('submit', formSubmission)
-
 }
 
 
@@ -47,7 +45,7 @@ function formSubmission(event) {
     event.preventDefault()
     const userMessage = document.querySelector('#user-message').value;
     if (userMessage != "")
-        nsSocket.emit("userMessage", { text: userMessage })
+        nsSocket.emit("userMessage", { text: userMessage, username: username })
 } 
 
 function HTMLTemp(msg) {

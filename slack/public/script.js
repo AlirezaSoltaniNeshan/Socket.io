@@ -1,3 +1,5 @@
+var username = prompt("Enter username", "nickname")
+
 const socket = io('http://localhost:9000');
 // Global Ns to Client.
 var nsSocket = "";
