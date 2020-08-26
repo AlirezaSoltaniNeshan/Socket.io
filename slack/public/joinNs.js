@@ -1,6 +1,9 @@
 function joinNs(endpoint) {
     if(nsSocket != ""){
+        // check to see if nsSocket actually a socket!s
         nsSocket.close();
+        // prevent to listener again again...
+        document.querySelector('#user-input').removeEventListener('submit', formSubmission)
     }
     // Create a namespace socket.io
     nsSocket = io(`http://localhost:9000${endpoint}`)
@@ -21,7 +24,7 @@ function joinNs(endpoint) {
         Array.from(document.getElementsByClassName('room')).forEach((roomEl) => {
             roomEl.addEventListener('click', e => {
                 console.log(e.target.innerText)
-                // joinRoom(e.target.innerText);
+                joinRoom(e.target.innerText);
             });
         });
         const topRoom = document.querySelector('.room');
@@ -35,13 +38,17 @@ function joinNs(endpoint) {
         document.querySelector('#messages').innerHTML += HTMLTemp(serverMessage);
     })
 
-    document.querySelector('.message-form').addEventListener('submit', (event) => {
-        event.preventDefault()
-        const userMessage = document.querySelector('#user-message').value;
-        if (userMessage != "")
-            nsSocket.emit("userMessage", { text: userMessage })
-    })
+    document.querySelector('.message-form').addEventListener('submit', formSubmission)
+
 }
+
+
+function formSubmission(event) {
+    event.preventDefault()
+    const userMessage = document.querySelector('#user-message').value;
+    if (userMessage != "")
+        nsSocket.emit("userMessage", { text: userMessage })
+} 
 
 function HTMLTemp(msg) {
     // msg.time has a lot a data about time like date year day of week and clock 00:00:00
