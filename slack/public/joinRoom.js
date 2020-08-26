@@ -15,7 +15,8 @@ function joinRoom(roomName){
         messagesUI.scrollTo(0, messagesUI.scrollHeight); //usersNumber
     })
             
-    nsSocket.on('usersNumber', (userCount)=>{
+    nsSocket.on('updateUsersNumber', (userCount)=>{
         document.querySelector('.curr-room-num-users').innerHTML = `${userCount}<span class="glyphicon glyphicon-user"></span>`
+        document.querySelector('.curr-room-text').innerText = `${roomName}`
     })
 }

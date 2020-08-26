@@ -47,7 +47,7 @@ namespaces.forEach(namespace=>{
             nsSocket.emit('historyCatchUp', nsRoom.history)
             // sync server to client for getting number of users in real time...
             io.of(namespace.endpoint).in(roomToJoin).clients((err, clients)=>{
-                io.of(namespace.endpoint).in(roomToJoin).emit("usersNumber", clients.length)
+                io.of(namespace.endpoint).in(roomToJoin).emit("updateUsersNumber", clients.length)
             });
         });
         nsSocket.on('userMessage', msg =>{
