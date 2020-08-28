@@ -6,9 +6,9 @@ app.use(express.static('public'))
 const namespaces = require('./data/namespaces');
 // console.log(namespaces[1].rooms)
 
-const expressServer = app.listen(9000)
+const expressServer = app.listen(9000) // HTTP 
 
-const io = socketio(expressServer)
+const io = socketio(expressServer) // HTTP to WS
 
 // Main namespace
 io.on('connection', (socket)=>{
